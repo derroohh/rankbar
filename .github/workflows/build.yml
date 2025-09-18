@@ -1,0 +1,23 @@
+name: Build ASI
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup MSVC
+        uses: ilammy/msvc-dev-cmd@v1
+
+      - name: Build with MSVC
+        run: |
+          mkdir build
+          cl /LD /EHsc src\*.cpp /Fe:rankbar.asi
+
+      - name: Upload ASI
+        uses: actions/upload-artifact@v4
+        with:
+          name: rankbar-asi
+          path: rankbar.asi
