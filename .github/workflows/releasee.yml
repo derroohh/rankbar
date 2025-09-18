@@ -1,0 +1,33 @@
+name: Build rankbar ASI
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'rankbar.cpp'
+      - '.github/workflows/build.yml'
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install MinGW
+        uses: egor-tensin/setup-mingw@v2
+        with:
+          version: 'latest'
+          architecture: x64
+
+      - name: Build rankbar.asi
+        run: |
+          g++ -shared -o rankbar.asi rankbar.cpp
+          dir
+
+      - name: Upload rankbar.asi
+        uses: actions/upload-artifact@v4
+        with:
+          name: rankbar.asi
+          path: rankbar.asi
